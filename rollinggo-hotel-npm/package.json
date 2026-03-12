@@ -1,0 +1,31 @@
+{
+  "name": "rollinggo-mcp",
+  "version": "0.1.0",
+  "description": "RollingGo hotel MCP server for stdio clients.",
+  "type": "module",
+  "bin": {
+    "rollinggo-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsup",
+    "prepack": "npm run build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "fastmcp": "3.34.0",
+    "zod": "4.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  }
+}
