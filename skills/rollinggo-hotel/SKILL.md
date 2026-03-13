@@ -1,132 +1,117 @@
 ---
 name: rollinggo-hotel
-description: Use the RollingGo CLI to find hotels, narrow results with destination, date, tag, distance, star, and budget filters, inspect hotel tags, and fetch hotel pricing and detail. This skill is primarily about the hotel search workflow; package distribution choice is secondary and defaults to npm/npx unless uv is explicitly required. Trigger this skill when the user asks how to search hotels, compare hotel candidates, filter hotel results, inspect hotel detail, or use the RollingGo CLI for hotel lookup.
+description: Hotel search and pricing via the RollingGo CLI. Use when the user wants to search hotels by destination, filter by date/star/budget/tags/distance, inspect hotel detail and room pricing, or look up hotel tags. Trigger phrases — "search hotels", "find hotels near", "hotel detail", "hotel pricing", "hotel tags", "rollinggo".
+homepage: https://mcp.agentichotel.cn
+metadata:
+  {
+    "openclaw": {
+      "emoji": "🏨",
+      "primaryEnv": "AIGOHOTEL_API_KEY",
+      "requires": {
+        "anyBins": ["rollinggo", "npx", "node", "uvx", "uv"],
+        "env": ["AIGOHOTEL_API_KEY"]
+      },
+      "install": [
+        {
+          "id": "node",
+          "kind": "node",
+          "package": "rollinggo",
+          "bins": ["rollinggo"],
+          "label": "Install rollinggo (npm)"
+        },
+        {
+          "id": "uv",
+          "kind": "uv",
+          "package": "rollinggo",
+          "bins": ["rollinggo"],
+          "label": "Install rollinggo (uv)"
+        }
+      ]
+    }
+  }
 ---
-# RollingGo CLI
 
-## Overview
+# RollingGo Hotel CLI
 
-Use the `rollinggo` command as the primary interface for hotel search workflows.
+## When to Use
 
-Prefer explicit subcommands and structured flags. Keep output in JSON unless a human explicitly asks for a table.
+✅ **Use this skill when:**
+- **Searching Candidates:** User wants to find hotels near a specific city, landmark, or address (e.g., "Find hotels near Tokyo Disneyland").
+- **Complex Filtering:** User needs to narrow down options using natural language queries combined with exact dates, guest count, star ratings, budget limits, or distance radius.
+- **Tag & Brand Matching:** User wants to find hotels with specific attributes (e.g., "family friendly", "breakfast included", "Marriott") by first checking the tag dictionary to build exact filters.
+- **Deep Dive & Pricing:** User wants to inspect detailed room plans, real-time pricing, cancellation policies, or availability for a specific hotel ID.
+- **Comparison & Evaluation:** User wants to compare multiple candidate hotels based on returning structured data and current rates.
+- **Hotel Booking:** User is ready to select a room and book a hotel. The returned booking URLs and detail page links can be provided to guide the user to complete their reservation.
 
-Use this skill to do four things:
+❌ **Don't use this skill when:**
+- User asks about non-hotel travel booking (flights, trains, transfers, car rentals).
 
-1. Explain how to search hotels with the CLI.
-2. Execute real hotel search, tag, and hotel-detail commands from the terminal.
-3. Help users narrow results and interpret hotel output.
-4. Validate parity between the Python and Node distributions when needed.
+## API Key
+
+Resolution order: `--api-key` flag → `AIGOHOTEL_API_KEY` env var.
+
+No key yet? Apply at: https://mcp.agentichotel.cn/apply
+
+## Runtime
+
+Choose based on user's environment. Load the matching reference file and keep it for the session.
+
+- **`npm`, `npx`, Node, or no preference:** Load [references/rollinggo-npx.md](references/rollinggo-npx.md)
+- **`uv`, `uvx`, PyPI, or Python:** Load [references/rollinggo-uv.md](references/rollinggo-uv.md)
+- **Parity check or both:** Load both references
+
+Default when unspecified → **npm/npx** (broader env compatibility).
 
 ## Primary Workflow
 
-Treat hotel lookup as the main task. Use this sequence unless the user has already narrowed the task to a later step.
+Run these steps in order unless the user is already at a later step.
 
-1. Clarify the search target: destination, date, nights, budget, star range, tags, distance, and occupancy.
-2. If tag-based filtering is needed, run `hotel-tags` first.
-3. Run `search-hotels` with structured filters.
-4. Read the JSON result and extract one or more `hotelId` values.
-5. Run `hotel-detail --hotel-id <id>` for the selected hotel.
-6. Interpret room plans, pricing, or business-level no-availability results.
-7. If results are weak, loosen filters and search again.
+1. Clarify: destination, dates, nights, occupancy, budget, stars, tags, distance
+2. If tag filters needed → run `hotel-tags` first to get valid tag strings
+3. Run `search-hotels` → parse JSON → extract `hotelId`
+4. Run `hotel-detail --hotel-id <id>` for room plans and pricing
+5. If results are weak → loosen filters and retry
 
-## Hotel Search Priorities
+## Commands Quick Reference
 
-When helping users search hotels, keep the emphasis on these tasks first:
+```bash
+# Discover tags
+rollinggo hotel-tags
 
-1. Getting the right destination and place type.
-2. Setting dates and occupancy correctly.
-3. Applying only the necessary filters.
-4. Searching first and drilling into detail second.
-5. Using JSON output so AI or scripts can continue processing.
+# Search hotels (minimum required flags)
+rollinggo search-hotels \
+  --origin-query "<user's natural language request>" \
+  --place "<destination>" \
+  --place-type "<value from --help>"
 
-Package or runtime discussion should only appear when the user needs to know how to execute the command.
+# Hotel detail with pricing
+rollinggo hotel-detail \
+  --hotel-id <id> \
+  --check-in-date YYYY-MM-DD \
+  --check-out-date YYYY-MM-DD \
+  --adult-count 2 --room-count 1
 
-## Execution Environment References
+# Discover all flags
+rollinggo search-hotels --help
+rollinggo hotel-detail --help
+```
 
-Load only the reference file that matches the runtime environment being discussed.
+## Key Rules
 
-- For the Node `npm` or `npx` package, read [references/rollinggo-npx.md](references/rollinggo-npx.md).
-- For the Python `uv` or `uvx` package, read [references/rollinggo-uv.md](references/rollinggo-uv.md).
-- For parity checks, release comparisons, or "make npm behave like uv" requests, read both reference files.
+- `--place-type` must use exact values from `rollinggo search-hotels --help`
+- `--star-ratings` format: `min,max` e.g. `4.0,5.0`
+- `--format table` allowed **only** on `search-hotels`; rejected by `hotel-detail` and `hotel-tags`
+- `--child-count` must match the count of `--child-age` flags
+- `--check-out-date` must be later than `--check-in-date`
+- Prefer `--hotel-id` over `--name` whenever available
 
-## Distribution Selection
+## Output
 
-Choose one distribution and keep the session consistent unless the user explicitly asks to compare them.
+- stdout → result payload (JSON by default)
+- stderr → errors only
+- Exit `0` success · `1` HTTP/network failure · `2` CLI validation failure
+- Results include booking URLs and hotel detail page links for downstream use
 
-- If the user does not express a packaging preference, default to the `npm` reference first because the npm/npx distribution has better cross-environment compatibility.
-- Use the `npm` reference when the user mentions `npm`, `npx`, npm publish, Node packaging, wants the most compatible default path, or is working in the `rollinggo-npx` local project.
-- Use the `uv` reference when the user explicitly mentions `uv`, `uvx`, PyPI, Python packaging, or the `rollinggo-uv` local project.
-- If the user says "the CLI should work the same in both places", use both references and compare command surface, help output, exit codes, and real request behavior.
+## Filter Loosening (when no results)
 
-## Shared Workflow
-
-Apply this sequence unless the user already narrowed the task to a later step.
-
-1. Confirm the user's hotel-search goal.
-2. Confirm how the user plans to run the CLI only if execution environment matters.
-3. If there is no explicit ecosystem constraint, choose the npm/npx distribution first.
-4. Confirm API key availability through `--api-key` or `AIGOHOTEL_API_KEY`. If the user does not have a key yet, direct them to apply at https://mcp.agentichotel.cn/apply.
-5. Inspect `rollinggo --help` or `rollinggo <command> --help` if parameter meaning is uncertain.
-6. Use `hotel-tags` if tags are needed before building filters.
-7. Use `search-hotels` to obtain candidate hotels.
-8. Extract `hotelId`.
-9. Use `hotel-detail --hotel-id <id>` for pricing and room detail.
-10. Interpret stdout, stderr, and exit codes.
-
-## Output Rules
-
-- Treat stdout as result payload only.
-- Treat stderr as error output only.
-- Prefer JSON for AI and automation.
-- Allow `--format table` only for `search-hotels`.
-- Expect exit code `0` for success, `1` for HTTP or network failure, and `2` for CLI validation failure.
-
-## How To Answer Users
-
-When the user is new to the CLI:
-
-1. Start with the hotel-search task, not the packaging discussion.
-2. Show the exact hotel-search command for the requested task.
-3. Explain what output to inspect next.
-4. Only then explain install or temporary run if the user still needs an execution path.
-5. Show API key setup if required.
-
-When the user is an AI operator or automation engineer:
-
-- Prefer compact commands.
-- Prefer JSON output.
-- Prefer `hotelId` over hotel name.
-- Prefer deterministic flags over prose.
-- Prefer one shell command per task.
-
-## Parity Checklist
-
-When comparing Python and Node distributions, verify these items explicitly:
-
-1. Top-level command name is `rollinggo`.
-2. Subcommands are `search-hotels`, `hotel-detail`, and `hotel-tags`.
-3. API key resolution order is `--api-key` then `AIGOHOTEL_API_KEY`.
-4. `search-hotels` supports `--format table`.
-5. `hotel-detail` and `hotel-tags` reject `--format table`.
-6. Missing required parameters return exit code `2`.
-7. HTTP failures return exit code `1`.
-8. Responses remove `bookingUrl` recursively before printing.
-9. Real hotel search and detail calls still succeed against the live API.
-
-## Local Paths
-
-Use these repo paths when working from local source:
-
-- Python package project: `rollinggo-uv/`
-- Node package project: `rollinggo-npx/`
-- Skill root: `skills/rollinggo-hotel/`
-
-## Good Defaults
-
-- Prefer explaining how to search hotels over explaining package distribution choice.
-- Prefer the npm/npx distribution by default because it is more compatible across environments.
-- Prefer installed `rollinggo ...` over longer wrappers when available.
-- Prefer the uv distribution only when the user explicitly wants Python packaging, uv tooling, or the `rollinggo-uv` source tree.
-- Prefer `search-hotels` followed by `hotel-detail`.
-- Prefer help inspection before guessing enum values or date formats.
-- Prefer reading the matching reference file instead of repeating long instructions in this file.
+Try in order: remove `--star-ratings` → increase `--size` → increase `--distance-in-meter` → remove tag filters → widen dates or budget
