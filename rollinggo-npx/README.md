@@ -118,7 +118,7 @@ Use this when:
 
 ```bash
 npm pack
-npx --yes --package ./rollinggo-0.1.0.tgz rollinggo --help
+npx --yes --package ./rollinggo-<version>.tgz rollinggo --help
 ```
 
 ## API Key
@@ -610,7 +610,7 @@ Simulate packaged `npx` usage:
 
 ```bash
 npm pack
-npx --yes --package ./rollinggo-0.1.0.tgz rollinggo --help
+npx --yes --package ./rollinggo-<version>.tgz rollinggo --help
 ```
 
 ## Publish
