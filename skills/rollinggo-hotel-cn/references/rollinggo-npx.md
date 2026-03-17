@@ -6,11 +6,12 @@
 ## 目录
 
 1. [运行方式](#运行方式)
-2. [API Key 配置](#api-key-配置)
-3. [命令说明](#命令说明)
-4. [端到端工作流](#端到端工作流)
-5. [问题排查](#问题排查)
-6. [本地开发](#本地开发)
+2. [版本新鲜度](#版本新鲜度)
+3. [API Key 配置](#api-key-配置)
+4. [命令说明](#命令说明)
+5. [端到端工作流](#端到端工作流)
+6. [问题排查](#问题排查)
+7. [本地开发](#本地开发)
 
 ---
 
@@ -19,15 +20,21 @@
 ### 临时执行（npx — 无需安装）
 
 ```bash
-npx rollinggo --help
-npx rollinggo search-hotels --origin-query "..." --place "东京迪士尼" --place-type "<查看 --help 获取合法值>"
+npx --yes --package rollinggo@latest rollinggo --help
+npx --yes --package rollinggo@latest rollinggo search-hotels --origin-query "..." --place "东京迪士尼" --place-type "<查看 --help 获取合法值>"
 ```
 
 ### 全局安装（适合长期高频使用）
 
 ```bash
-npm install -g rollinggo
+npm install -g rollinggo@latest
 rollinggo --help
+```
+
+升级已安装的全局版本：
+
+```bash
+npm install -g rollinggo@latest
 ```
 
 ### 本地源码模式（仓库内开发）
@@ -37,6 +44,22 @@ cd rollinggo-npx
 npm install && npm run build
 node dist/cli.js --help
 node dist/cli.js search-hotels --help
+```
+
+---
+
+## 版本新鲜度
+
+本参考默认规则：每次执行都使用 npm 最新发布版本。命令模式如下：
+
+```bash
+npx --yes --package rollinggo@latest rollinggo <子命令> ...
+```
+
+如果使用全局安装命令，先升级再运行：
+
+```bash
+npm install -g rollinggo@latest
 ```
 
 ---
@@ -61,6 +84,8 @@ rollinggo hotel-tags --api-key YOUR_API_KEY
 ---
 
 ## 命令说明
+
+为了便于阅读，下面示例默认使用已安装的 `rollinggo` 命令。本参考的“最新版默认前缀”为 `npx --yes --package rollinggo@latest rollinggo`。
 
 ### `search-hotels`
 
@@ -157,7 +182,7 @@ rollinggo search-hotels \
 
 ## 问题排查
 
-- **`rollinggo: command not found`：** 使用 `npx rollinggo ...` 或 `npm install -g rollinggo`
+- **`rollinggo: command not found`：** 使用 `npx --yes --package rollinggo@latest rollinggo ...` 或 `npm install -g rollinggo@latest`
 - **缺少 API Key 报错：** 传入 `--api-key` 或设置 `AIGOHOTEL_API_KEY` 环境变量
 - **退出码 `2`（参数校验失败）：** 加 `--help` 重新运行，检查必填参数、日期格式、`--child-count` 与 `--child-age` 数量是否一致
 - **没有返回任何酒店：** 移除 `--star-ratings` → 增大 `--size` 或 `--distance-in-meter` → 移除标签筛选

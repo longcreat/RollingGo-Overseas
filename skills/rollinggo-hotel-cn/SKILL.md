@@ -62,6 +62,18 @@ metadata:
 
 未明确指定时默认使用 **npm/npx**（跨环境兼容性更好）。
 
+## 版本新鲜度（始终使用最新版）
+
+本技能默认策略：每次执行都使用最新发布版本。
+
+- **npm/npx：** `npx --yes --package rollinggo@latest rollinggo ...`
+- **uvx：** `uvx --refresh --from rollinggo rollinggo ...`
+
+如果使用已安装命令而不是临时执行，先升级再运行：
+
+- **npm 全局：** `npm install -g rollinggo@latest`
+- **uv 工具：** `uv tool upgrade rollinggo`
+
 ## 主要工作流
 
 除非用户已经把问题限定在某个具体步骤，否则按顺序执行：

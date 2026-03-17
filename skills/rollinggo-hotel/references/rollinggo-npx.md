@@ -6,11 +6,12 @@
 ## Table of Contents
 
 1. [Run Modes](#run-modes)
-2. [API Key Setup](#api-key-setup)
-3. [Command Guide](#command-guide)
-4. [End-to-End Workflows](#end-to-end-workflows)
-5. [Troubleshooting](#troubleshooting)
-6. [Local Development](#local-development)
+2. [Version Freshness](#version-freshness)
+3. [API Key Setup](#api-key-setup)
+4. [Command Guide](#command-guide)
+5. [End-to-End Workflows](#end-to-end-workflows)
+6. [Troubleshooting](#troubleshooting)
+7. [Local Development](#local-development)
 
 ---
 
@@ -19,15 +20,21 @@
 ### Temporary (npx — no install needed)
 
 ```bash
-npx rollinggo --help
-npx rollinggo search-hotels --origin-query "..." --place "Tokyo Disneyland" --place-type "<from --help>"
+npx --yes --package rollinggo@latest rollinggo --help
+npx --yes --package rollinggo@latest rollinggo search-hotels --origin-query "..." --place "Tokyo Disneyland" --place-type "<from --help>"
 ```
 
 ### Global install (recommended for repeated use)
 
 ```bash
-npm install -g rollinggo
+npm install -g rollinggo@latest
 rollinggo --help
+```
+
+Upgrade an existing global install:
+
+```bash
+npm install -g rollinggo@latest
 ```
 
 ### Local source (this repo)
@@ -37,6 +44,22 @@ cd rollinggo-npx
 npm install && npm run build
 node dist/cli.js --help
 node dist/cli.js search-hotels --help
+```
+
+---
+
+## Version Freshness
+
+Default in this reference: guarantee the latest npm release on every execution.
+
+```bash
+npx --yes --package rollinggo@latest rollinggo <subcommand> ...
+```
+
+If using a globally installed command, upgrade first:
+
+```bash
+npm install -g rollinggo@latest
 ```
 
 ---
@@ -61,6 +84,8 @@ Apply at: https://mcp.agentichotel.cn/apply
 ---
 
 ## Command Guide
+
+Commands below use the installed `rollinggo` binary for readability. The latest-by-default prefix in this reference is `npx --yes --package rollinggo@latest rollinggo`.
 
 ### `search-hotels`
 
@@ -157,7 +182,7 @@ rollinggo search-hotels \
 
 ## Troubleshooting
 
-- **`rollinggo: command not found`:** Run `npx rollinggo ...` or `npm install -g rollinggo`
+- **`rollinggo: command not found`:** Run `npx --yes --package rollinggo@latest rollinggo ...` or `npm install -g rollinggo@latest`
 - **Missing API key error:** Pass `--api-key` or set `AIGOHOTEL_API_KEY`
 - **Exit code `2` (validation):** Rerun with `--help`; check required flags, date format, `--child-count` vs `--child-age` count
 - **No hotels returned:** Remove `--star-ratings`, increase `--size` or `--distance-in-meter`, remove tag filters

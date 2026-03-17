@@ -6,11 +6,12 @@
 ## 目录
 
 1. [运行方式](#运行方式)
-2. [API Key 配置](#api-key-配置)
-3. [命令说明](#命令说明)
-4. [端到端工作流](#端到端工作流)
-5. [问题排查](#问题排查)
-6. [本地开发](#本地开发)
+2. [版本新鲜度](#版本新鲜度)
+3. [API Key 配置](#api-key-配置)
+4. [命令说明](#命令说明)
+5. [端到端工作流](#端到端工作流)
+6. [问题排查](#问题排查)
+7. [本地开发](#本地开发)
 
 ---
 
@@ -21,8 +22,8 @@
 > 注意：包名和命令名都叫 `rollinggo`，所以需要 `--from` 语法。
 
 ```bash
-uvx --from rollinggo rollinggo --help
-uvx --from rollinggo rollinggo search-hotels \
+uvx --refresh --from rollinggo rollinggo --help
+uvx --refresh --from rollinggo rollinggo search-hotels \
   --origin-query "查找东京迪士尼附近的酒店" \
   --place "东京迪士尼" --place-type "<查看 --help 获取合法值>"
 ```
@@ -31,6 +32,7 @@ uvx --from rollinggo rollinggo search-hotels \
 
 ```bash
 uv tool install rollinggo
+uv tool upgrade rollinggo
 rollinggo --help
 
 # 如果安装后终端找不到命令：
@@ -42,6 +44,22 @@ uv tool update-shell
 ```bash
 uv run --directory rollinggo-uv rollinggo --help
 uv run --directory rollinggo-uv rollinggo search-hotels --help
+```
+
+---
+
+## 版本新鲜度
+
+本参考默认规则：每次执行都使用 PyPI 最新发布版本。命令模式如下：
+
+```bash
+uvx --refresh --from rollinggo rollinggo <子命令> ...
+```
+
+如果使用已安装工具，先升级再运行：
+
+```bash
+uv tool upgrade rollinggo
 ```
 
 ---
@@ -66,6 +84,8 @@ rollinggo hotel-tags --api-key YOUR_API_KEY
 ---
 
 ## 命令说明
+
+为了便于阅读，下面示例默认使用已安装的 `rollinggo` 命令。本参考的“最新版默认前缀”为 `uvx --refresh --from rollinggo rollinggo`。
 
 ### `search-hotels`
 
@@ -123,7 +143,7 @@ rollinggo hotel-tags
 rollinggo hotel-tags --api-key YOUR_API_KEY
 
 # 免安装临时执行
-uvx --from rollinggo rollinggo hotel-tags
+uvx --refresh --from rollinggo rollinggo hotel-tags
 ```
 
 返回的标签字符串需**原样**使用于 `--preferred-tag` / `--required-tag` / `--excluded-tag` 参数中。
@@ -165,7 +185,7 @@ rollinggo search-hotels \
 
 ## 问题排查
 
-- **`rollinggo: command not found`：** 使用 `uvx --from rollinggo rollinggo ...` 或 `uv tool install rollinggo && uv tool update-shell`
+- **`rollinggo: command not found`：** 使用 `uvx --refresh --from rollinggo rollinggo ...` 或 `uv tool install rollinggo && uv tool update-shell`
 - **缺少 API Key 报错：** 传入 `--api-key` 或设置 `AIGOHOTEL_API_KEY` 环境变量
 - **退出码 `2`（参数校验失败）：** 加 `--help` 重新运行，检查必填参数、日期格式、`--child-count` 与 `--child-age` 数量是否一致
 - **没有返回任何酒店：** 移除 `--star-ratings` → 增大 `--size` 或 `--distance-in-meter` → 移除标签筛选

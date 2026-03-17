@@ -62,6 +62,18 @@ Choose based on user's environment. Load the matching reference file and keep it
 
 Default when unspecified → **npm/npx** (broader env compatibility).
 
+## Version Freshness (Always Latest)
+
+Default policy for this skill: use the newest release on every run.
+
+- **npm/npx:** `npx --yes --package rollinggo@latest rollinggo ...`
+- **uvx:** `uvx --refresh --from rollinggo rollinggo ...`
+
+If using an installed command instead of temporary execution, upgrade first:
+
+- **npm global:** `npm install -g rollinggo@latest`
+- **uv tool:** `uv tool upgrade rollinggo`
+
 ## Primary Workflow
 
 Run these steps in order unless the user is already at a later step.
