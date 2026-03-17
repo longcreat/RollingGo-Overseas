@@ -190,7 +190,7 @@ Important:
 - `json` is the stable machine-readable format
 - `hotel-detail` and `hotel-tags` only support `json`
 
-The CLI also removes `bookingUrl` fields from responses before printing.
+The CLI keeps `bookingUrl` fields in responses so booking links remain available to downstream callers.
 
 ## Exit Codes
 

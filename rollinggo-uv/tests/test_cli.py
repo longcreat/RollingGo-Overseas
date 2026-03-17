@@ -135,7 +135,7 @@ def test_search_hotels_default_stdout_is_pure_json(monkeypatch) -> None:
     assert result.exit_code == 0
     assert result.stderr == ""
     payload = json.loads(result.stdout)
-    assert payload == {"items": [{"hotelId": 1, "name": "Alpha"}]}
+    assert payload == {"items": [{"hotelId": 1, "name": "Alpha", "bookingUrl": "secret"}]}
 
 
 def test_hotel_detail_identifier_validation_returns_exit_code_two() -> None:

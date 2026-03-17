@@ -8,7 +8,7 @@ from .api import request_api, resolve_api_key
 from .constants import DEFAULT_BASE_URL
 from .errors import ApiRequestError, CliValidationError
 from .models import OutputFormat, build_hotel_detail_payload, build_search_hotels_payload, parse_star_ratings
-from .output import print_json, print_search_table, remove_field
+from .output import print_json, print_search_table
 
 AI_HELP_TEXT = (
     "RollingGo hotel CLI.\n\n"
@@ -220,15 +220,12 @@ def search_hotels(
             max_price_per_night=max_price_per_night,
             min_room_size=min_room_size,
         )
-        result = remove_field(
-            request_api(
-                "POST",
-                "/hotelsearch",
-                resolve_api_key(api_key),
-                base_url=base_url,
-                payload=payload,
-            ),
-            "bookingUrl",
+        result = request_api(
+            "POST",
+            "/hotelsearch",
+            resolve_api_key(api_key),
+            base_url=base_url,
+            payload=payload,
         )
         if output_format == "table":
             print_search_table(result)
@@ -352,15 +349,12 @@ def hotel_detail(
             country_code=country_code,
             currency=currency,
         )
-        result = remove_field(
-            request_api(
-                "POST",
-                "/hoteldetail",
-                resolve_api_key(api_key),
-                base_url=base_url,
-                payload=payload,
-            ),
-            "bookingUrl",
+        result = request_api(
+            "POST",
+            "/hoteldetail",
+            resolve_api_key(api_key),
+            base_url=base_url,
+            payload=payload,
         )
         print_json(result)
     except CliValidationError as exc:
@@ -399,10 +393,7 @@ def hotel_tags(
 ) -> None:
     try:
         _resolve_format(output_format, allow_table=False)
-        result = remove_field(
-            request_api("GET", "/hoteltags", resolve_api_key(api_key), base_url=base_url),
-            "bookingUrl",
-        )
+        result = request_api("GET", "/hoteltags", resolve_api_key(api_key), base_url=base_url)
         print_json(result)
     except CliValidationError as exc:
         _handle_error(exc, 2)

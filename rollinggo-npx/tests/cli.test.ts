@@ -158,7 +158,9 @@ describe("CLI", () => {
 
     expect(result.code).toBe(0);
     expect(result.stderr).toBe("");
-    expect(result.stdout).toBe('{\n  "items": [\n    {\n      "hotelId": 1,\n      "name": "Alpha"\n    }\n  ]\n}\n');
+    expect(result.stdout).toBe(
+      '{\n  "items": [\n    {\n      "hotelId": 1,\n      "name": "Alpha",\n      "bookingUrl": "secret"\n    }\n  ]\n}\n',
+    );
   });
 
   it("returns exit code 1 for API failures", async () => {

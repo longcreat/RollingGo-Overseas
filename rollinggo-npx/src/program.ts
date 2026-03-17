@@ -11,7 +11,7 @@ import {
   outputFormatSchema,
   parseStarRatings,
 } from "./payloads.js";
-import { removeField, renderJson, renderSearchTable } from "./output.js";
+import { renderJson, renderSearchTable } from "./output.js";
 
 const AI_HELP_TEXT = [
   "Recommended for AI agents: call standard subcommands with structured options,",
@@ -231,14 +231,11 @@ export function createProgram(
             maxPricePerNight: options.maxPricePerNight,
             minRoomSize: options.minRoomSize,
           });
-          const response = removeField(
-            await requestApiImpl(
-              "POST",
-              "/hotelsearch",
-              resolveApiKey(options.apiKey),
-              { baseUrl: options.baseUrl, payload },
-            ),
-            "bookingUrl",
+          const response = await requestApiImpl(
+            "POST",
+            "/hotelsearch",
+            resolveApiKey(options.apiKey),
+            { baseUrl: options.baseUrl, payload },
           );
           stdout(format === "table" ? renderSearchTable(response) : renderJson(response));
         } catch (error) {
@@ -318,14 +315,11 @@ export function createProgram(
             countryCode: options.countryCode,
             currency: options.currency,
           });
-          const response = removeField(
-            await requestApiImpl(
-              "POST",
-              "/hoteldetail",
-              resolveApiKey(options.apiKey),
-              { baseUrl: options.baseUrl, payload },
-            ),
-            "bookingUrl",
+          const response = await requestApiImpl(
+            "POST",
+            "/hoteldetail",
+            resolveApiKey(options.apiKey),
+            { baseUrl: options.baseUrl, payload },
           );
           stdout(renderJson(response));
         } catch (error) {
@@ -350,14 +344,11 @@ export function createProgram(
       .action(async (options) => {
         try {
           ensureFormat(options.format, false);
-          const response = removeField(
-            await requestApiImpl(
-              "GET",
-              "/hoteltags",
-              resolveApiKey(options.apiKey),
-              { baseUrl: options.baseUrl },
-            ),
-            "bookingUrl",
+          const response = await requestApiImpl(
+            "GET",
+            "/hoteltags",
+            resolveApiKey(options.apiKey),
+            { baseUrl: options.baseUrl },
           );
           stdout(renderJson(response));
         } catch (error) {

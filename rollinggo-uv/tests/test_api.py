@@ -3,7 +3,6 @@ import pytest
 
 from rollinggo_cli.api import request_api, resolve_api_key
 from rollinggo_cli.errors import ApiRequestError, CliValidationError
-from rollinggo_cli.output import remove_field
 
 
 def test_resolve_api_key_prefers_cli_arg(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -38,7 +37,7 @@ def test_request_api_uses_expected_http_shape() -> None:
         transport=httpx.MockTransport(handler),
     )
 
-    assert remove_field(response, "bookingUrl") == {"items": [{"hotelId": 1}]}
+    assert response == {"items": [{"hotelId": 1, "bookingUrl": "secret"}]}
 
 
 def test_request_api_wraps_http_errors() -> None:

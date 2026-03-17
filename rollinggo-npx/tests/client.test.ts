@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from "vitest";
 
 import { requestApi } from "../src/client.js";
 import { ApiRequestError } from "../src/errors.js";
-import { removeField } from "../src/output.js";
 
 describe("requestApi", () => {
   it("sends expected method, headers, and body", async () => {
@@ -28,7 +27,7 @@ describe("requestApi", () => {
       },
       method: "POST",
     });
-    expect(removeField(response, "bookingUrl")).toEqual({ items: [{ hotelId: 1 }] });
+    expect(response).toEqual({ items: [{ hotelId: 1, bookingUrl: "secret" }] });
   });
 
   it("wraps HTTP errors", async () => {
