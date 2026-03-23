@@ -66,14 +66,14 @@ uv tool upgrade rollinggo
 
 ## API Key 配置
 
-解析顺序：`--api-key` 参数 → `AIGOHOTEL_API_KEY` 环境变量。
+解析顺序：`--api-key` 参数 → `RollingGo_API_KEY` 环境变量。
 
 ```bash
 # PowerShell
-$env:AIGOHOTEL_API_KEY="YOUR_API_KEY"
+$env:RollingGo_API_KEY="YOUR_API_KEY"
 
 # Bash / zsh
-export AIGOHOTEL_API_KEY="YOUR_API_KEY"
+export RollingGo_API_KEY="YOUR_API_KEY"
 
 # 单条命令临时指定
 rollinggo hotel-tags --api-key YOUR_API_KEY

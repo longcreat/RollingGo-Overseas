@@ -1,15 +1,15 @@
 ---
-name: rollinggo-hotel-cn
+name: rollinggo-searchhotel-cn
 description: 使用 RollingGo CLI 查询酒店信息、筛选结果、读取酒店标签和获取房型价格。当用户需要按目的地 / 日期 / 星级 / 预算 / 标签 / 距离搜索酒店、查看酒店详情与房型报价，或读取酒店标签库时触发本技能。触发短语——"搜索酒店"、"查酒店"、"酒店详情"、"房型价格"、"酒店标签"、"附近酒店"、"rollinggo"。
 homepage: https://mcp.agentichotel.cn
 metadata:
   {
     "openclaw": {
       "emoji": "🏨",
-      "primaryEnv": "AIGOHOTEL_API_KEY",
+      "primaryEnv": "RollingGo_API_KEY",
       "requires": {
         "anyBins": ["rollinggo", "npx", "node", "uvx", "uv"],
-        "env": ["AIGOHOTEL_API_KEY"]
+        "env": ["RollingGo_API_KEY"]
       },
       "install": [
         {
@@ -48,7 +48,7 @@ metadata:
 
 ## API Key
 
-解析顺序：`--api-key` 参数 → `AIGOHOTEL_API_KEY` 环境变量。
+解析顺序：`--api-key` 参数 → `RollingGo_API_KEY` 环境变量。
 
 还没有 Key？前往申请：https://mcp.agentichotel.cn/apply
 

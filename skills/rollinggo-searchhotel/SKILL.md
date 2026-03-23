@@ -1,15 +1,15 @@
 ---
-name: rollinggo-hotel
+name: rollinggo-searchhotel
 description: Hotel search and pricing via the RollingGo CLI. Use when the user wants to search hotels by destination, filter by date/star/budget/tags/distance, inspect hotel detail and room pricing, or look up hotel tags. Trigger phrases — "search hotels", "find hotels near", "hotel detail", "hotel pricing", "hotel tags", "rollinggo".
 homepage: https://mcp.agentichotel.cn
 metadata:
   {
     "openclaw": {
       "emoji": "🏨",
-      "primaryEnv": "AIGOHOTEL_API_KEY",
+      "primaryEnv": "RollingGo_API_KEY",
       "requires": {
         "anyBins": ["rollinggo", "npx", "node", "uvx", "uv"],
-        "env": ["AIGOHOTEL_API_KEY"]
+        "env": ["RollingGo_API_KEY"]
       },
       "install": [
         {
@@ -48,7 +48,7 @@ metadata:
 
 ## API Key
 
-Resolution order: `--api-key` flag → `AIGOHOTEL_API_KEY` env var.
+Resolution order: `--api-key` flag → `RollingGo_API_KEY` env var.
 
 No key yet? Apply at: https://mcp.agentichotel.cn/apply
 

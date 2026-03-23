@@ -66,14 +66,14 @@ uv tool upgrade rollinggo
 
 ## API Key Setup
 
-Resolution order: `--api-key` flag → `AIGOHOTEL_API_KEY` env var.
+Resolution order: `--api-key` flag → `RollingGo_API_KEY` env var.
 
 ```bash
 # PowerShell
-$env:AIGOHOTEL_API_KEY="YOUR_API_KEY"
+$env:RollingGo_API_KEY="YOUR_API_KEY"
 
 # Bash / zsh
-export AIGOHOTEL_API_KEY="YOUR_API_KEY"
+export RollingGo_API_KEY="YOUR_API_KEY"
 
 # Single-command override
 rollinggo hotel-tags --api-key YOUR_API_KEY
